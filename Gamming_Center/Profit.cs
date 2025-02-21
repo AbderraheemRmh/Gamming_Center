@@ -15,16 +15,19 @@ namespace Gamming_Center
     public partial class Profit : Form
     {
         private ProfitsModel model;
+
         public Profit()
         {
             InitializeComponent();
             model = new ProfitsModel();
             model.LoadProductToDataGridView(listProduct);
             model.LoadPostsToDataGridView(listPost);
-            editSize();
+            
             CalculateTotalFromGrid();
             CalculateBaseFromGrid();
+            CalculateProfit();
             CalculateTotalFromGridP();
+            
         }
 
 
@@ -32,8 +35,6 @@ namespace Gamming_Center
         {
             panel1.Width = this.Width / 2;
             panel2.Width = this.Width / 2;
-            listPost.Height = panel1.Height * 4/5;
-            listProduct.Height = panel2.Height * 4/5;
         }
         private void btnDay_Click(object sender, EventArgs e)
         {
@@ -55,6 +56,7 @@ namespace Gamming_Center
             model.LoadFilteredData(listProduct,query);
             CalculateTotalFromGrid();
             CalculateBaseFromGrid();
+            CalculateProfit();
         }
 
         private void btnWeek_Click(object sender, EventArgs e)
@@ -77,6 +79,7 @@ namespace Gamming_Center
             model.LoadFilteredData(listProduct, query);
             CalculateTotalFromGrid();
             CalculateBaseFromGrid();
+            CalculateProfit();
         }
 
         private void btnMonth_Click(object sender, EventArgs e)
@@ -99,6 +102,7 @@ namespace Gamming_Center
             model.LoadFilteredData(listProduct, query);
             CalculateTotalFromGrid();
             CalculateBaseFromGrid();
+            CalculateProfit();
         }
 
         private void btnReset_Click(object sender, EventArgs e)
@@ -106,10 +110,11 @@ namespace Gamming_Center
             model.LoadProductToDataGridView(listProduct);
             CalculateTotalFromGrid();
             CalculateBaseFromGrid();
+            CalculateProfit();
         }
 
         private void button4_Click(object sender, EventArgs e)
-        {
+        { 
             string query = "SELECT " +
                         "Product_Cashier.ID AS CashierID," +
                         "Worker.Name AS WorkerName, " +
@@ -127,12 +132,13 @@ namespace Gamming_Center
                         "WHERE Date BETWEEN @StartDate AND @EndDate";
             var parameters = new Dictionary<string, object>
     {
-        { "@StartDate", startDatePicker.Value.ToString("yyyy-MM-dd HH:mm:ss") },
-        { "@EndDate", endDatePicker.Value.ToString("yyyy-MM-dd HH:mm:ss") }
+        { "@StartDate", startDatePicker.Value.ToString("yyyy-MM-dd,HH:mm:ss") },
+        { "@EndDate", endDatePicker.Value.ToString("yyyy-MM-dd,HH:mm:ss") }
     };
             model.LoadFilteredData(listProduct, query, parameters);
             CalculateTotalFromGrid();
             CalculateBaseFromGrid();
+            CalculateProfit();
         }
 
 
@@ -174,6 +180,11 @@ namespace Gamming_Center
 
             txtBase.Text = total.ToString();
         }
+        private void CalculateProfit()
+        {
+            txtProfit.Text = (Convert.ToDecimal(txtSum.Text) - Convert.ToDecimal(txtBase.Text)).ToString();
+        }
+
 
         private void btnDayP_Click(object sender, EventArgs e)
         {
@@ -283,6 +294,12 @@ namespace Gamming_Center
             model.LoadPostsToDataGridView(listPost);
             CalculateTotalFromGridP();
         }
+
+        private void Profit_Load(object sender, EventArgs e)
+        {
+            editSize();
+        }
+
     }
     
 }

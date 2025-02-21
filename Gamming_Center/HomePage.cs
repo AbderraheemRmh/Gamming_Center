@@ -447,5 +447,11 @@ namespace Gamming_Center
                 lblUser.Text = GetWorkerNameById(issuer);
                 restPanelsIssuer(issuer);
         }
+
+        private void btnQuikSell_Click(object sender, EventArgs e)
+        {
+                checkoutProducts checkProduct = new checkoutProducts(issuer);
+                checkProduct.Show();
+        }
     }
 }

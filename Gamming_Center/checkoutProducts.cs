@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -14,69 +13,20 @@ using System.Windows.Forms;
 
 namespace Gamming_Center
 {
-    
-    public partial class Checkout : Form
+    public partial class checkoutProducts : Form
     {
-        private string post;
-        private int id;
-        private double time;
         private int issuer;
         private double totalPrice = 0;
-        private double postPrice = 0;
-        private int numberPlayer;
         private Dictionary<int, CheckoutItem> checkoutItems = new Dictionary<int, CheckoutItem>();
-        public Checkout(int id, string post, double time, int issuer, int numberPlayer)
+        public checkoutProducts(int issuer)
         {
             InitializeComponent();
-            this.post = post;
-            this.id = id;
-            lblPost.Text = this.post;
-            this.time = time;
-            this.numberPlayer = numberPlayer;
             this.issuer = issuer;
-            postPrice = CalculateTotalPrice(this.id, this.time, this.numberPlayer);
-            lblPostTotal.Text = string.Format("{0:0.0}", postPrice) + " DA";
-            totalPrice += postPrice;
             lblTotal.Text = string.Format("{0:0.0}", (totalPrice)) + " DA";
             LoadProducts();
-
-
-
         }
 
-        private double CalculateTotalPrice(int postId, double timeUsed, int playerCount)
-        {
-            string connectionString = "Data Source=GammingCenter.db;Version=3;";
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-
-                using (var command = new SQLiteCommand())
-                {
-                    command.Connection = connection;
-                    command.CommandText = @"
-                SELECT CASE @PlayerCount 
-                       WHEN 2 THEN Price2P
-                       WHEN 4 THEN Price4P
-                       ELSE 0 END AS PricePerHour
-                FROM Type
-                WHERE ID = (SELECT Type FROM Post WHERE ID = @PostId)";
-                    command.Parameters.AddWithValue("@PlayerCount", playerCount);
-                    command.Parameters.AddWithValue("@PostId", postId);
-
-                    var result = command.ExecuteScalar();
-                    if (result != null && double.TryParse(result.ToString(), out var pricePerHour))
-                    {
-                        lblPricePH.Text = pricePerHour.ToString();
-                        return pricePerHour * timeUsed;
-                    }
-                    else
-                    {
-                        throw new Exception("Failed to retrieve price. Please check the post and type data.");
-                    }
-                }
-            }
-        }
+        
         private void LoadProducts()
         {
             string connectionString = "Data Source=GammingCenter.db;Version=3;";
@@ -138,7 +88,7 @@ namespace Gamming_Center
         private void UpdateCheckoutPanel()
         {
             boughtProduct.Controls.Clear();
-            totalPrice = postPrice;
+            totalPrice = 0;
             foreach (var item in checkoutItems.Values)
             {
                 var checkoutControl = new CheckoutControl
@@ -240,7 +190,12 @@ namespace Gamming_Center
                         }
 
                         transaction.Commit();
-                        
+                        MessageBox.Show("Checkout completed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        // Clear checkout list and refresh UI
+                        checkoutItems.Clear();
+                        UpdateCheckoutPanel();
+                        this.Close(); // Close the form after successful checkout
+
                     }
                     catch (Exception ex)
                     {
@@ -248,44 +203,6 @@ namespace Gamming_Center
                         MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-            }
-            try
-            {
-                int postId = id; // Replace with the ID passed to this form
-                double timeUsed = time; // Replace with the time used passed to this form
-                int playerCount = numberPlayer; // Replace with the player count (2 or 4)
-                int issuerId = issuer; // Replace with your variable storing issuer ID
-
-
-
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-                {
-                    connection.Open();
-
-                    using (var command = new SQLiteCommand())
-                    {
-                        command.Connection = connection;
-                        command.CommandText = @"
-                    INSERT INTO Post_Cashier (Issuer, Date, Price, Post)
-                    VALUES (@Issuer, @Date, @Price, @Post)";
-                        command.Parameters.AddWithValue("@Issuer", issuerId);
-                        command.Parameters.AddWithValue("@Date", DateTime.Now.ToString("yyyy-MM-dd,HH:mm:ss"));
-                        command.Parameters.AddWithValue("@Price", postPrice);
-                        command.Parameters.AddWithValue("@Post", postId);
-
-                        command.ExecuteNonQuery();
-                    }
-                }
-
-                MessageBox.Show("Checkout completed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // Clear checkout list and refresh UI
-                checkoutItems.Clear();
-                UpdateCheckoutPanel();
-                this.Close(); // Close the form after successful checkout
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error during checkout: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -298,83 +215,9 @@ namespace Gamming_Center
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void checkouttxt_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panel5_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void productsPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void panel4_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void boughtProduct_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void lblPost_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblPostTotal_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panel6_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void lblPricePH_Click(object sender, EventArgs e)
-        {
-
-        }
+       
     }
-    public class CheckoutItem
-    {
-        public int ProductId { get; set; }      // Unique identifier for the product
-        public string ProductName { get; set; } // Name of the product
-        public decimal ProductPrice { get; set; } // Price of the product
-        public int Quantity { get; set; }       // Quantity of the product in the checkout
 
-        public int BasePrice;
-    }
+
 }
+

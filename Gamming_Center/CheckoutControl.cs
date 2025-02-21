@@ -21,7 +21,7 @@ namespace Gamming_Center
         public decimal ProductPrice
         {
             get => decimal.Parse(lblProductPrice.Text);
-            set => lblProductPrice.Text = value.ToString("C"); // Format as currency
+            set => lblProductPrice.Text = value.ToString() + " DA"; 
         }
         public int Quantity
         {

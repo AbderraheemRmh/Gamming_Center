@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace Gamming_Center
         private TimeSpan? targetTime = null;
         private DateTime? endTime;
         private bool isPaused = false;
+        private bool isStarted = false; 
         public soloTimer(int issuer)
         {
 
@@ -80,28 +82,54 @@ namespace Gamming_Center
 
         private void BtnStart_Click(object sender, EventArgs e)
         {
-            this.BackColor = Color.Green;
-            txtMasked.BackColor = Color.Green;
-            lblTimer.Text = "00:00:00";
-            lblStart.Text = "00:00:00";
-            lblEnd.Text = "00:00:00";
-            colorThemWhire();
-            string input = txtMasked.Text.Trim();
-            string formattedInput = FormatTimeInput(input);
-            txtMasked.Text = formattedInput;
-            if (IsValidTime(formattedInput))
+            if (isStarted)
             {
-                targetTime = TimeSpan.Parse(formattedInput);
+                if (isPaused)
+                {
+                    this.BackColor = Color.Green;
+                    txtMasked.BackColor = Color.Green;
+                    colorThemWhire();
+                    isPaused = false;
+                    startTime = DateTime.Now - elapsedTime; // Adjust start time to continue from where it left off
+                    timer.Start();
+                    btnStart.IconChar = FontAwesome.Sharp.IconChar.Pause;
+                }
+                else
+                {
+                    isPaused = true;
+                    colorThemNormal();
+                    this.BackColor = Color.Orange;
+                    txtMasked.BackColor = Color.Orange;
+                    timer.Stop();
+                    btnStart.IconChar = FontAwesome.Sharp.IconChar.Play;
+                }
             }
-            startTime = DateTime.Now; // Record the starting time
-            elapsedTime = TimeSpan.Zero; // Reset elapsed time
-            lblTimer.Text = "00:00:00";
-            lblStart.Text = DateTime.Now.ToLongTimeString();
-            btnStart.Enabled = false;
-            btnStop.Enabled = true;
-            txtMasked.ReadOnly = true;
-            endTime = null; // Reset end time
-            timer.Start();
+            else
+            { 
+                this.BackColor = Color.Green;
+                txtMasked.BackColor = Color.Green;
+                lblTimer.Text = "00:00:00";
+                lblStart.Text = "00:00:00";
+                lblEnd.Text = "00:00:00";
+                colorThemWhire();
+                string input = txtMasked.Text.Trim();
+                string formattedInput = FormatTimeInput(input);
+                txtMasked.Text = formattedInput;
+                if (IsValidTime(formattedInput))
+                {
+                    targetTime = TimeSpan.Parse(formattedInput);
+                }
+                startTime = DateTime.Now; // Record the starting time
+                elapsedTime = TimeSpan.Zero; // Reset elapsed time
+                lblTimer.Text = "00:00:00";
+                lblStart.Text = DateTime.Now.ToLongTimeString();
+                btnStop.Enabled = true;
+                txtMasked.ReadOnly = true;
+                endTime = null; // Reset end time
+                timer.Start();
+                isStarted = true;
+                btnStart.IconChar = FontAwesome.Sharp.IconChar.Pause;
+            }
         }
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -142,7 +170,9 @@ namespace Gamming_Center
             txtMasked.BackColor = Color.FromArgb(236, 229, 240);
             this.BackColor = Color.FromArgb(236, 229, 240);
             lblEnd.Text = DateTime.Now.ToLongTimeString();
-
+            btnStart.IconChar = FontAwesome.Sharp.IconChar.Play;
+            isStarted = false;
+            isPaused = false;
             Checkout checkform = new Checkout(this.Id, _title, elapsedTime.TotalHours, issuer, 2); // Pass the PostId to the new form
             checkform.Show();
         }
@@ -160,6 +190,7 @@ namespace Gamming_Center
                     txtMasked.BackColor = Color.Crimson;
                     MessageBox.Show("Target time reached!", Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                lblPrice.Text = CalculateTotalPrice(this.Id, elapsedTime.TotalHours, 2).ToString();
             }
         }
 
@@ -176,19 +207,18 @@ namespace Gamming_Center
                 lblTimer.Text = "00:00:00";
                 lblStart.Text = "00:00:00";
                 lblEnd.Text = "00:00:00";
-                btnStart.Enabled = true;
+                lblPrice.Text = "0";
                 btnStop.Enabled = false;
                 txtMasked.Text = "";
                 txtMasked.Enabled = true;
                 this.BackColor = Color.White;
                 targetTime = null;
-                isPaused = false;
-                btnPause.IconChar = FontAwesome.Sharp.IconChar.Pause;
                 txtMasked.Clear();
                 txtMasked.ReadOnly = false;
                 targetTime = null;
+                isStarted = false;
                 isPaused = false;
-                btnPause.IconChar = FontAwesome.Sharp.IconChar.Pause;
+                btnStart.IconChar = FontAwesome.Sharp.IconChar.Play;
                 txtMasked.BackColor = Color.FromArgb(236, 229, 240);
                 this.BackColor = Color.FromArgb(236, 229, 240);
                 colorThemNormal();
@@ -201,15 +231,14 @@ namespace Gamming_Center
             label1.ForeColor = Color.White;
             label2.ForeColor = Color.White;
             label3.ForeColor = Color.White;
+            lblPrice.ForeColor = Color.White;
             lblEnd.ForeColor = Color.White;
             lblStart.ForeColor = Color.White;
             lblTimer.ForeColor = Color.White;
             lblPost.ForeColor = Color.White;
-            btnPause.IconColor = Color.White;
             btnStart.IconColor = Color.White;
             btnStop.ForeColor = Color.White;
             btnReset.IconColor = Color.White;
-            btnPause.FlatAppearance.BorderColor = Color.White;
             btnStart.FlatAppearance.BorderColor = Color.White;
             btnStop.FlatAppearance.BorderColor = Color.White;
             btnReset.FlatAppearance.BorderColor = Color.White;
@@ -222,14 +251,13 @@ namespace Gamming_Center
             label2.ForeColor = Color.FromArgb(34, 34, 34);
             label3.ForeColor = Color.FromArgb(34, 34, 34);
             lblEnd.ForeColor = Color.FromArgb(34, 34, 34);
+            lblPrice.ForeColor = Color.FromArgb(34, 34, 34);
             lblStart.ForeColor = Color.FromArgb(34, 34, 34);
             lblTimer.ForeColor = Color.FromArgb(34, 34, 34);
             lblPost.ForeColor = Color.FromArgb(34, 34, 34);
-            btnPause.IconColor = Color.FromArgb(34, 34, 34);
             btnStart.IconColor = Color.FromArgb(34, 34, 34);
             btnStop.ForeColor = Color.FromArgb(34, 34, 34);
             btnReset.IconColor = Color.FromArgb(34, 34, 34);
-            btnPause.FlatAppearance.BorderColor = Color.FromArgb(34, 34, 34);
             btnStart.FlatAppearance.BorderColor = Color.FromArgb(34, 34, 34);
             btnStop.FlatAppearance.BorderColor = Color.FromArgb(34, 34, 34);
             btnReset.FlatAppearance.BorderColor = Color.FromArgb(34, 34, 34);
@@ -249,28 +277,38 @@ namespace Gamming_Center
             get { return _id; }
             set { _id = value; }
         }
-
-        private void btnPause_Click(object sender, EventArgs e)
+        private int CalculateTotalPrice(int postId, double timeUsed, int playerCount)
         {
-            if (isPaused)
+            string connectionString = "Data Source=GammingCenter.db;Version=3;";
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
-                this.BackColor = Color.Green;
-                txtMasked.BackColor = Color.Green;
-                colorThemWhire();
-                isPaused = false;
-                startTime = DateTime.Now - elapsedTime; // Adjust start time to continue from where it left off
-                timer.Start();
-                btnPause.IconChar = FontAwesome.Sharp.IconChar.Pause;
-            }
-            else
-            {
-                isPaused = true;
-                colorThemNormal();
-                this.BackColor = Color.Orange;
-                txtMasked.BackColor = Color.Orange;
-                timer.Stop();
-                btnPause.IconChar = FontAwesome.Sharp.IconChar.Play;
+                connection.Open();
+
+                using (var command = new SQLiteCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandText = @"
+                SELECT CASE @PlayerCount 
+                       WHEN 2 THEN Price2P
+                       WHEN 4 THEN Price4P
+                       ELSE 0 END AS PricePerHour
+                FROM Type
+                WHERE ID = (SELECT Type FROM Post WHERE ID = @PostId)";
+                    command.Parameters.AddWithValue("@PlayerCount", playerCount);
+                    command.Parameters.AddWithValue("@PostId", postId);
+
+                    var result = command.ExecuteScalar();
+                    if (result != null && double.TryParse(result.ToString(), out var pricePerHour))
+                    {
+                        return (int)(pricePerHour * timeUsed);
+                    }
+                    else
+                    {
+                        throw new Exception("Failed to retrieve price. Please check the post and type data.");
+                    }
+                }
             }
         }
+
     }
 }

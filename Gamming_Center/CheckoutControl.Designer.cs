@@ -32,6 +32,7 @@
             this.lblProductPrice = new System.Windows.Forms.Label();
             this.lblQuantity = new System.Windows.Forms.Label();
             this.btnRemove = new System.Windows.Forms.Button();
+            this.splitter1 = new System.Windows.Forms.Splitter();
             this.SuspendLayout();
             // 
             // lblProductName
@@ -76,17 +77,28 @@
             this.btnRemove.UseVisualStyleBackColor = false;
             this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
+            // splitter1
+            // 
+            this.splitter1.BackColor = System.Drawing.Color.Teal;
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.splitter1.Location = new System.Drawing.Point(0, 94);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(172, 10);
+            this.splitter1.TabIndex = 4;
+            this.splitter1.TabStop = false;
+            // 
             // CheckoutControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.splitter1);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.lblQuantity);
             this.Controls.Add(this.lblProductPrice);
             this.Controls.Add(this.lblProductName);
             this.Name = "CheckoutControl";
-            this.Size = new System.Drawing.Size(172, 96);
+            this.Size = new System.Drawing.Size(172, 104);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -98,5 +110,6 @@
         private System.Windows.Forms.Label lblProductPrice;
         private System.Windows.Forms.Label lblQuantity;
         private System.Windows.Forms.Button btnRemove;
+        private System.Windows.Forms.Splitter splitter1;
     }
 }

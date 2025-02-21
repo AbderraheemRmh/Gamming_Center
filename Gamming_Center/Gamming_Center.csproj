@@ -91,6 +91,12 @@
     <Compile Include="CheckoutControl.Designer.cs">
       <DependentUpon>CheckoutControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="checkoutProducts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="checkoutProducts.Designer.cs">
+      <DependentUpon>checkoutProducts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dashboard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,6 +190,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CheckoutControl.resx">
       <DependentUpon>CheckoutControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="checkoutProducts.resx">
+      <DependentUpon>checkoutProducts.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>

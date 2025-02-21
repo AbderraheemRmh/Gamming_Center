@@ -17,17 +17,17 @@ namespace Gamming_Center
     {
         private IconButton currentBtn;
         private Panel leftBorderBtn;
-
+        private bool canClose;
 
         private int borderSize = 2;
         private Size formSize;
-        public Dashboard()
+        public Dashboard(bool canClose)
         {
             
 
             // Add a FlowLayoutPanel to organize the panels
             InitializeComponent();
-            
+            this.canClose = canClose;
             CollapseMenu();
             leftBorderBtn = new Panel();
             leftBorderBtn.Size = new Size(7, 60);
@@ -307,7 +307,20 @@ namespace Gamming_Center
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            if (canClose)
+            {
+                Application.Exit();
+            }
+            else
+            {
+                isBilliardOpen = false;
+                isPS4Open = false;
+                isPS5Open = false;
+                isSimulatorOpen = false;
+                this.Hide();
+            }
+
+
         }
 
         private void btnMenu_Click(object sender, EventArgs e)

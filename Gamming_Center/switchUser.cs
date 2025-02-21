@@ -81,10 +81,9 @@ namespace Gamming_Center
 
                                 if (result == DialogResult.Yes)
                                 {
-                                    Dashboard dashboard = new Dashboard();
+                                    Dashboard dashboard = new Dashboard(false);
                                     dashboard.Show();
-                                    form.Close();
-                                    this.Hide();
+                                    this.Close();
                                 }
                             }
                             else

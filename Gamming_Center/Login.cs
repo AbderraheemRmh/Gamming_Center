@@ -88,7 +88,7 @@ namespace Gamming_Center
                             // Redirect based on the level
                             if (userLevel == "Admin")
                             {
-                                Dashboard dashboard = new Dashboard();
+                                Dashboard dashboard = new Dashboard(true);
                                 dashboard.Show();
                                 this.Hide();
                             }
