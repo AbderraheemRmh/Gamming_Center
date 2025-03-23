@@ -13,20 +13,69 @@ using System.Windows.Forms;
 
 namespace Gamming_Center
 {
-    public partial class checkoutProducts : Form
+    public partial class preCheckout: Form
     {
-        private int issuer;
         private double totalPrice = 0;
+        private List<int> preCheckoutList;
         private Dictionary<int, CheckoutItem> checkoutItems = new Dictionary<int, CheckoutItem>();
-        public checkoutProducts(int issuer)
+        public preCheckout(List<int> productList)
         {
             InitializeComponent();
-            this.issuer = issuer;
+            preCheckoutList = productList;
             lblTotal.Text = string.Format("{0:0.0}", (totalPrice)) + " DA";
             LoadProducts();
+            addPreCheckoutItems();
+        }
+        private void addPreCheckoutItems()
+        {
+            foreach (int id in preCheckoutList)
+            {
+                int productId = id;
+                string ProductNameDB = "";
+                int ProductPriceDB = 0;
+                int BasePriceDB = 0;
+
+                if (checkoutItems.ContainsKey(productId))
+                {
+                    // If the product already exists in the checkout, increment its quantity
+                    checkoutItems[productId].Quantity++;
+                }
+                else
+                {
+                    string connectionString = "Data Source=GammingCenter.db;Version=3;";
+                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand("SELECT  Name, Price, Original_Price FROM Product WHERE ID = @ProductID", connection))
+                        {
+                            command.Parameters.AddWithValue("@ProductID", productId);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    ProductNameDB = reader.GetString(0);
+                                    ProductPriceDB = reader.GetInt32(1);
+                                    BasePriceDB = reader.GetInt32(2);
+                                }
+                            }
+                        }
+                    }
+                    // Add a new product to the checkout
+                    var checkoutItem = new CheckoutItem
+                    {
+                        ProductId = productId,
+                        ProductName = ProductNameDB,
+                        ProductPrice = ProductPriceDB,
+                        Quantity = 1,
+                        BasePrice = BasePriceDB
+                    };
+                    checkoutItems.Add(productId, checkoutItem);
+                }
+            }
+
+            UpdateCheckoutPanel(); // Refresh the checkout list
         }
 
-        
         private void LoadProducts()
         {
             string connectionString = "Data Source=GammingCenter.db;Version=3;";
@@ -62,7 +111,7 @@ namespace Gamming_Center
             if (productControl == null) return;
 
             int productId = productControl.ProductId;
-
+            preCheckoutList.Add(productId);
             if (checkoutItems.ContainsKey(productId))
             {
                 // If the product already exists in the checkout, increment its quantity
@@ -112,7 +161,7 @@ namespace Gamming_Center
             if (checkoutControl == null) return;
 
             int productId = checkoutControl.ProductId;
-
+            preCheckoutList.Remove(productId);
             // Remove the item from the checkout list
             if (checkoutItems.ContainsKey(productId))
             {
@@ -135,75 +184,33 @@ namespace Gamming_Center
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Are you sure you want to cancel the checkout?",
-                                 "Cancel Confirmation",
+            var result = MessageBox.Show("Are you sure you want to clear the checkout?",
+                                 "Clear Confirmation",
                                  MessageBoxButtons.YesNo,
-                                 MessageBoxIcon.Question);
+                                 MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {
+                foreach (var key in checkoutItems.Keys)
+                {
+                    for (int i = 0; i < checkoutItems[key].Quantity; i++) 
+                    { 
+                        int index = preCheckoutList.IndexOf(key);
+                        if (index != -1) // Ensure the item exists
+                        {
+                            preCheckoutList.RemoveAt(index); // Remove only the first occurrence
+                        }
+                    }
+                }
                 this.Close(); // Close the form if user confirms
             }
         }
 
         private void btnValid_Click(object sender, EventArgs e)
         {
-            string connectionString = "Data Source=GammingCenter.db;Version=3;";
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
+           
+                this.Close(); // Close the form if user confirms
 
-                using (var transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        foreach (var item in checkoutItems.Values)
-                        {
-                            // Insert into Product_Cachier table
-                            var insertCommand = new SQLiteCommand(
-                                @"INSERT INTO Product_Cashier (Issuer, Date, Price, Product, Amount, Base) 
-                          VALUES (@Issuer, @Date, @Price, @Product, @Amount, @Base)",
-                                connection,
-                                transaction);
-
-                            insertCommand.Parameters.AddWithValue("@Issuer", issuer);
-                            insertCommand.Parameters.AddWithValue("@Date", DateTime.Now.ToString("yyyy-MM-dd,HH:mm:ss"));
-                            insertCommand.Parameters.AddWithValue("@Price", item.ProductPrice * item.Quantity);
-                            insertCommand.Parameters.AddWithValue("@Product", item.ProductId);
-                            insertCommand.Parameters.AddWithValue("@Amount", item.Quantity);
-                            insertCommand.Parameters.AddWithValue("@Base", item.BasePrice * item.Quantity);
-
-                            insertCommand.ExecuteNonQuery();
-
-                            // Update Product table
-                            var updateCommand = new SQLiteCommand(
-                                @"UPDATE Product 
-                          SET Amount = Amount - @SoldAmount 
-                          WHERE ID = @ProductId",
-                                connection,
-                                transaction);
-
-                            updateCommand.Parameters.AddWithValue("@SoldAmount", item.Quantity);
-                            updateCommand.Parameters.AddWithValue("@ProductId", item.ProductId);
-
-                            updateCommand.ExecuteNonQuery();
-                        }
-
-                        transaction.Commit();
-                        MessageBox.Show("Checkout completed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        // Clear checkout list and refresh UI
-                        checkoutItems.Clear();
-                        UpdateCheckoutPanel();
-                        this.Close(); // Close the form after successful checkout
-
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
         }
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
@@ -215,22 +222,5 @@ namespace Gamming_Center
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void productsPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
-
-
 }
-

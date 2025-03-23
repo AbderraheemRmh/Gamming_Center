@@ -14,6 +14,7 @@ namespace Gamming_Center
 {
     public partial class soloTimer : UserControl
     {
+        private List<int> preCheckoutProducts = new List<int>();
         private int cornerRadius = 20;
         private Timer timer;
         private DateTime startTime;
@@ -173,8 +174,9 @@ namespace Gamming_Center
             btnStart.IconChar = FontAwesome.Sharp.IconChar.Play;
             isStarted = false;
             isPaused = false;
-            Checkout checkform = new Checkout(this.Id, _title, elapsedTime.TotalHours, issuer, 2); // Pass the PostId to the new form
+            Checkout checkform = new Checkout(this.Id, _title, elapsedTime.TotalHours, issuer, 2, preCheckoutProducts); // Pass the PostId to the new form
             checkform.Show();
+            preCheckoutProducts.Clear();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -222,6 +224,7 @@ namespace Gamming_Center
                 txtMasked.BackColor = Color.FromArgb(236, 229, 240);
                 this.BackColor = Color.FromArgb(236, 229, 240);
                 colorThemNormal();
+                preCheckoutProducts.Clear();
             }
         }
 
@@ -239,6 +242,8 @@ namespace Gamming_Center
             btnStart.IconColor = Color.White;
             btnStop.ForeColor = Color.White;
             btnReset.IconColor = Color.White;
+            btnAdd.IconColor = Color.White;
+            btnAdd.FlatAppearance.BorderColor = Color.White;
             btnStart.FlatAppearance.BorderColor = Color.White;
             btnStop.FlatAppearance.BorderColor = Color.White;
             btnReset.FlatAppearance.BorderColor = Color.White;
@@ -258,6 +263,8 @@ namespace Gamming_Center
             btnStart.IconColor = Color.FromArgb(34, 34, 34);
             btnStop.ForeColor = Color.FromArgb(34, 34, 34);
             btnReset.IconColor = Color.FromArgb(34, 34, 34);
+            btnAdd.IconColor = Color.FromArgb(34, 34, 34);
+            btnAdd.FlatAppearance.BorderColor = Color.FromArgb(34, 34, 34);
             btnStart.FlatAppearance.BorderColor = Color.FromArgb(34, 34, 34);
             btnStop.FlatAppearance.BorderColor = Color.FromArgb(34, 34, 34);
             btnReset.FlatAppearance.BorderColor = Color.FromArgb(34, 34, 34);
@@ -310,5 +317,10 @@ namespace Gamming_Center
             }
         }
 
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            preCheckout precheckoutform = new preCheckout(preCheckoutProducts);// Pass the PostId to the new form
+            precheckoutform.ShowDialog();
+        }
     }
 }

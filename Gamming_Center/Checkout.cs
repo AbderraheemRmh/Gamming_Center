@@ -17,6 +17,7 @@ namespace Gamming_Center
     
     public partial class Checkout : Form
     {
+        private List<int> preCheckoutProducts = new List<int>();
         private string post;
         private int id;
         private double time;
@@ -25,9 +26,10 @@ namespace Gamming_Center
         private double postPrice = 0;
         private int numberPlayer;
         private Dictionary<int, CheckoutItem> checkoutItems = new Dictionary<int, CheckoutItem>();
-        public Checkout(int id, string post, double time, int issuer, int numberPlayer)
+        public Checkout(int id, string post, double time, int issuer, int numberPlayer, List<int> preCheckoutProducts)
         {
             InitializeComponent();
+            this.preCheckoutProducts = preCheckoutProducts;
             this.post = post;
             this.id = id;
             lblPost.Text = this.post;
@@ -39,11 +41,63 @@ namespace Gamming_Center
             totalPrice += postPrice;
             lblTotal.Text = string.Format("{0:0.0}", (totalPrice)) + " DA";
             LoadProducts();
+            addPreCheckoutItems();
 
 
 
         }
 
+
+
+        private void addPreCheckoutItems()
+        {
+            foreach (int id in preCheckoutProducts)
+            {
+                int productId = id;
+                string ProductNameDB = "";
+                int ProductPriceDB = 0;
+                int BasePriceDB = 0;
+
+                if (checkoutItems.ContainsKey(productId))
+                {
+                    // If the product already exists in the checkout, increment its quantity
+                    checkoutItems[productId].Quantity++;
+                }
+                else
+                {
+                    string connectionString = "Data Source=GammingCenter.db;Version=3;";
+                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand("SELECT  Name, Price, Original_Price FROM Product WHERE ID = @ProductID", connection))
+                        {
+                            command.Parameters.AddWithValue("@ProductID", productId);
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    ProductNameDB = reader.GetString(0);
+                                    ProductPriceDB = reader.GetInt32(1);
+                                    BasePriceDB = reader.GetInt32(2);
+                                }
+                            }
+                        }
+                    }
+                    // Add a new product to the checkout
+                    var checkoutItem = new CheckoutItem
+                    {
+                        ProductId = productId,
+                        ProductName = ProductNameDB,
+                        ProductPrice = ProductPriceDB,
+                        Quantity = 1,
+                        BasePrice = BasePriceDB
+                    };
+                    checkoutItems.Add(productId, checkoutItem);
+                }
+            }
+
+            UpdateCheckoutPanel(); // Refresh the checkout list
+        }
         private double CalculateTotalPrice(int postId, double timeUsed, int playerCount)
         {
             string connectionString = "Data Source=GammingCenter.db;Version=3;";

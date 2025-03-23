@@ -1,6 +1,6 @@
 ﻿namespace Gamming_Center
 {
-    partial class checkoutProducts
+    partial class preCheckout
     {
         /// <summary>
         /// Required designer variable.
@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.checkouttxt = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.boughtProduct = new System.Windows.Forms.FlowLayoutPanel();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -38,40 +36,19 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblTotal = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.checkouttxt = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.productsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
-            this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel7.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel5.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // checkouttxt
-            // 
-            this.checkouttxt.AutoSize = true;
-            this.checkouttxt.BackColor = System.Drawing.Color.Transparent;
-            this.checkouttxt.Font = new System.Drawing.Font("Forte", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkouttxt.ForeColor = System.Drawing.Color.White;
-            this.checkouttxt.Location = new System.Drawing.Point(332, 0);
-            this.checkouttxt.Name = "checkouttxt";
-            this.checkouttxt.Size = new System.Drawing.Size(352, 87);
-            this.checkouttxt.TabIndex = 14;
-            this.checkouttxt.Text = "Checkout";
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.Teal;
-            this.panel1.Controls.Add(this.checkouttxt);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1100, 100);
-            this.panel1.TabIndex = 16;
-            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
             // panel2
             // 
@@ -81,8 +58,7 @@
             this.panel2.Location = new System.Drawing.Point(814, 100);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(286, 650);
-            this.panel2.TabIndex = 17;
-            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
+            this.panel2.TabIndex = 20;
             // 
             // boughtProduct
             // 
@@ -125,7 +101,7 @@
             this.btnValid.Name = "btnValid";
             this.btnValid.Size = new System.Drawing.Size(158, 41);
             this.btnValid.TabIndex = 2;
-            this.btnValid.Text = "Checkout";
+            this.btnValid.Text = "Confirm";
             this.btnValid.UseVisualStyleBackColor = false;
             this.btnValid.Click += new System.EventHandler(this.btnValid_Click);
             // 
@@ -140,7 +116,7 @@
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(122, 41);
             this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Text = "Clear";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -168,6 +144,29 @@
             this.label5.TabIndex = 15;
             this.label5.Text = "Total:";
             // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.Teal;
+            this.panel1.Controls.Add(this.checkouttxt);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1100, 100);
+            this.panel1.TabIndex = 19;
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // checkouttxt
+            // 
+            this.checkouttxt.AutoSize = true;
+            this.checkouttxt.BackColor = System.Drawing.Color.Transparent;
+            this.checkouttxt.Font = new System.Drawing.Font("Forte", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkouttxt.ForeColor = System.Drawing.Color.White;
+            this.checkouttxt.Location = new System.Drawing.Point(332, 0);
+            this.checkouttxt.Name = "checkouttxt";
+            this.checkouttxt.Size = new System.Drawing.Size(463, 87);
+            this.checkouttxt.TabIndex = 14;
+            this.checkouttxt.Text = "PreCheckout";
+            // 
             // panel3
             // 
             this.panel3.Controls.Add(this.productsPanel);
@@ -176,17 +175,17 @@
             this.panel3.Location = new System.Drawing.Point(0, 100);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(814, 650);
-            this.panel3.TabIndex = 18;
+            this.panel3.TabIndex = 21;
             // 
             // productsPanel
             // 
             this.productsPanel.AutoScroll = true;
+            this.productsPanel.BackColor = System.Drawing.Color.White;
             this.productsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.productsPanel.Location = new System.Drawing.Point(0, 44);
             this.productsPanel.Name = "productsPanel";
             this.productsPanel.Size = new System.Drawing.Size(814, 606);
             this.productsPanel.TabIndex = 19;
-            this.productsPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.productsPanel_Paint);
             // 
             // panel5
             // 
@@ -208,9 +207,8 @@
             this.label4.Size = new System.Drawing.Size(204, 38);
             this.label4.TabIndex = 15;
             this.label4.Text = "Consommation";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
-            // checkoutProducts
+            // preCheckout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -220,14 +218,14 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "checkoutProducts";
-            this.Text = "checkoutProducts";
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.Name = "preCheckout";
+            this.Text = "preCheckout";
             this.panel2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.panel7.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
@@ -237,8 +235,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label checkouttxt;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.FlowLayoutPanel boughtProduct;
         private System.Windows.Forms.Panel panel4;
@@ -247,6 +243,8 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label lblTotal;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label checkouttxt;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.FlowLayoutPanel productsPanel;
         private System.Windows.Forms.Panel panel5;

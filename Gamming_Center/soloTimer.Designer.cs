@@ -41,6 +41,7 @@
             this.btnReset = new FontAwesome.Sharp.IconButton();
             this.btnStart = new FontAwesome.Sharp.IconButton();
             this.lblPrice = new System.Windows.Forms.Label();
+            this.btnAdd = new FontAwesome.Sharp.IconButton();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -210,11 +211,28 @@
             this.lblPrice.TabIndex = 33;
             this.lblPrice.Text = "0";
             // 
+            // btnAdd
+            // 
+            this.btnAdd.BackColor = System.Drawing.Color.Transparent;
+            this.btnAdd.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAdd.IconChar = FontAwesome.Sharp.IconChar.PlusCircle;
+            this.btnAdd.IconColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.btnAdd.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnAdd.IconSize = 35;
+            this.btnAdd.Location = new System.Drawing.Point(65, 3);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(35, 35);
+            this.btnAdd.TabIndex = 34;
+            this.btnAdd.UseVisualStyleBackColor = false;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
             // soloTimer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(229)))), ((int)(((byte)(240)))));
+            this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.lblPrice);
             this.Controls.Add(this.txtMasked);
             this.Controls.Add(this.lblPost);
@@ -250,5 +268,6 @@
         private System.Windows.Forms.Label lblTimer;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label lblPrice;
+        private FontAwesome.Sharp.IconButton btnAdd;
     }
 }

@@ -263,8 +263,8 @@ namespace Gamming_Center
                         "WHERE Date BETWEEN @StartDate AND @EndDate";
             var parameters = new Dictionary<string, object>
     {
-        { "@StartDate", startDatePickerP.Value.ToString("yyyy-MM-dd HH:mm:ss") },
-        { "@EndDate", endDatePickerP.Value.ToString("yyyy-MM-dd HH:mm:ss") }
+        { "@StartDate", startDatePickerP.Value.ToString("yyyy-MM-dd,HH:mm:ss") },
+        { "@EndDate", endDatePickerP.Value.ToString("yyyy-MM-dd,HH:mm:ss") }
     };
             model.LoadFilteredData(listPost, query, parameters);
             CalculateTotalFromGridP();

@@ -43,6 +43,7 @@
             this.consolType = new System.Windows.Forms.PictureBox();
             this.lblPrice4 = new System.Windows.Forms.Label();
             this.lblPrice2 = new System.Windows.Forms.Label();
+            this.btnAdd = new FontAwesome.Sharp.IconButton();
             ((System.ComponentModel.ISupportInitialize)(this.consolType)).BeginInit();
             this.SuspendLayout();
             // 
@@ -239,12 +240,29 @@
             this.lblPrice2.TabIndex = 21;
             this.lblPrice2.Text = "0";
             // 
+            // btnAdd
+            // 
+            this.btnAdd.BackColor = System.Drawing.Color.Transparent;
+            this.btnAdd.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAdd.IconChar = FontAwesome.Sharp.IconChar.PlusCircle;
+            this.btnAdd.IconColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.btnAdd.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnAdd.IconSize = 35;
+            this.btnAdd.Location = new System.Drawing.Point(60, 3);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(35, 35);
+            this.btnAdd.TabIndex = 22;
+            this.btnAdd.UseVisualStyleBackColor = false;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
             // ps4Timer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(229)))), ((int)(((byte)(240)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.lblPrice2);
             this.Controls.Add(this.lblPrice4);
             this.Controls.Add(this.txtMasked);
@@ -285,5 +303,6 @@
         private System.Windows.Forms.PictureBox consolType;
         private System.Windows.Forms.Label lblPrice4;
         private System.Windows.Forms.Label lblPrice2;
+        private FontAwesome.Sharp.IconButton btnAdd;
     }
 }

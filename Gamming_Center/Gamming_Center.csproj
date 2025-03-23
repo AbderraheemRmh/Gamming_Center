@@ -126,6 +126,12 @@
     <Compile Include="Post.Designer.cs">
       <DependentUpon>Post.cs</DependentUpon>
     </Compile>
+    <Compile Include="preCheckout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="preCheckout.Designer.cs">
+      <DependentUpon>preCheckout.cs</DependentUpon>
+    </Compile>
     <Compile Include="Product.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -205,6 +211,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Post.resx">
       <DependentUpon>Post.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="preCheckout.resx">
+      <DependentUpon>preCheckout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Product.resx">
       <DependentUpon>Product.cs</DependentUpon>
